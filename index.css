@@ -9,6 +9,7 @@ body{
     text-align: center;
 }
 
+
 #title{
     font-family: 'Luckiest Guy', cursive;
     font-size: 50px;
@@ -17,9 +18,11 @@ body{
     padding: 50px;
     border-radius: 100px;
     margin: 0;
+    border: 10px dotted rgb(114, 114, 255);
 }
 
 #pro{
+    border: 5px dotted rgb(255, 255, 255);
     color: yellow;
     background-color: red;
     padding: 10px;
@@ -32,7 +35,7 @@ body{
 
 #container{
     width: 300px;
-    height: 250px;
+    height: 300px;
     border-radius: 20px;
     background-color: rgb(206, 206, 206);
     padding: 25px;
@@ -41,11 +44,13 @@ body{
 }
 
 #start{
-    width: 90px;
+    width: 100px;
+    font-family: 'Luckiest Guy', cursive;
 }
 
 #controls{
     margin: none;
+    border: 2px solid rgb(212, 121, 197);
     padding: 10px;
     border-radius: 10px;
     background-color: rgb(233, 233, 233);
@@ -74,6 +79,8 @@ body{
 
 button {
     outline: none;
+    margin-left: 10px;
+    margin-right: 10px;
     border-radius: 10px;
     background-color: white;
     padding: 10px;

@@ -8,9 +8,9 @@ const attack = document.querySelector('#attack');
 const computer_score = document.querySelector('#computer_score');
 const player_score = document.querySelector('#player_score');
 let started = false;
-let count = 0;
 
-count_view.textContent = `Count: ${count}`;
+
+
 
 start.addEventListener('click', ()=>{
     if(started === false){
@@ -18,9 +18,7 @@ start.addEventListener('click', ()=>{
         start.textContent = 'Reset';
         attack.textContent = ``;
     } else {
-        count = 0;
-        attack.textContent = ``
-        count_view.textContent = `Count: ${count}`;
+        reset()
     }
     game();
 });
@@ -30,22 +28,37 @@ function computerPlay(){
     return attackStyle[Math.floor(Math.random()*attackStyle.length)];
 }
 
+function reset(){
+    return true;
+}
+
 function game(){
     let computerScore = 0;
     let playerScore = 0;
-    
+    let count = 0;
+    count_view.textContent = `Count: ${count}`;
+
+    if (reset()){
+        count = 0;
+        playerScore = 0;
+        computerScore = 0;
+        attack.textContent = ``
+        count_view.textContent = `Round: ${count}`;
+        computer_score.textContent = computerScore;
+        player_score.textContent = playerScore;
+    }
     
         rock.addEventListener('click', playRock);
         paper.addEventListener('click', playPaper);
         scissors.addEventListener('click', playScissors);
 
         function playRock(){
-            if(count >=5){
-                attack.textContent = 'You have reached the maximum count';
+            if(count > 4){
+                attack.textContent = 'You have reached the final round';
             } else {
                 let computerSelection = computerPlay();
                 count++;
-                count_view.textContent = `Count: ${count}`;
+                count_view.textContent = `Round: ${count}`;
                 playRound('rock', computerSelection);
                 attack.textContent = `Player Chose: rock | Computer Chose: ${computerSelection}`;
 
@@ -55,11 +68,11 @@ function game(){
         }
 
         function playPaper(){
-            if(count >=5){
-                attack.textContent = 'You have reached the maximum count';
+            if(count > 4){
+                attack.textContent = 'You have reached the final round';
             } else {
                 count++;
-                count_view.textContent = `Count: ${count}`;
+                count_view.textContent = `Round: ${count}`;
                 let computerSelection = computerPlay();
                 playRound('paper', computerSelection);
                 attack.textContent = `Player Chose: paper | Computer Chose: ${computerSelection}`;
@@ -70,11 +83,11 @@ function game(){
         }
 
         function playScissors(){
-            if (count >= 5){
-                attack.textContent = 'You have reached the maximum count';
+            if (count > 4){
+                attack.textContent = 'You have reached the final round';
             } else {
                 count++;
-                count_view.textContent = `Count: ${count}`;
+                count_view.textContent = `Round: ${count}`;
                 let computerSelection = computerPlay();
                 playRound('scissors', computerSelection);
                 attack.textContent = `Player Chose: scissors | Computer Chose: ${computerSelection}`;
