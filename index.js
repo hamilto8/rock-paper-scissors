@@ -11,7 +11,6 @@ const success = document.querySelector('#success');
 const failure = document.querySelector('#failure');
 const tie = document.querySelector("#tie");
 const lights = document.querySelectorAll(".lights");
-let lightCount = 0;
 let started = false;
 
 
@@ -35,33 +34,33 @@ function reset(){
     return true;
 }
 
-function redLight(){
-    lights[lightCount].style.backgroundColor = 'red';
-    lightCount++;
-}
-
-function greenLight(){
-    lights[lightCount].style.backgroundColor = 'rgb(0, 202, 0)';
-    lightCount++;
-}
-
-function tieLight(){
-    lights[lightCount].style.backgroundColor = 'gray';
-    lightCount++;
-}
-
-function lightsOut(){
-    lights.forEach((light)=>{
-        light.style.backgroundColor = 'black';
-    })
-    lightCount = 0;
-}
-
 function game(){
     let computerScore = 0;
     let playerScore = 0;
     let count = 0;
+    let lightCount = 0;
     count_view.textContent = `Count: ${count}`;
+
+    function redLight(){
+        lights[lightCount].style.backgroundColor = 'red';
+        lightCount++;
+    }
+    
+    function greenLight(){
+        lights[lightCount].style.backgroundColor = 'rgb(0, 202, 0)';
+        lightCount++;
+    }
+    
+    function tieLight(){
+        lights[lightCount].style.backgroundColor = 'gray';
+        lightCount++;
+    }
+    
+    function lightsOut(){
+        lights.forEach((light)=>{
+            light.style.backgroundColor = 'black';
+        })
+    }
 
     if (reset()){
         count = 0;
@@ -71,6 +70,7 @@ function game(){
         count_view.textContent = `Round: ${count}`;
         computer_score.textContent = computerScore;
         player_score.textContent = playerScore;
+        lightCount = 0;
         lightsOut();
     }
     
