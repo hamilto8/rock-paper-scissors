@@ -1,14 +1,22 @@
 body{
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
     display: grid;
+    margin: 0;
     background-color: rgb(136, 44, 44);
-    /* margin-top: 20%; */
 }
 #banner {
     margin: 0 auto;
     text-align: center;
 }
 
+.lights{
+    border-radius: 10px;
+    display: inline-grid;
+    margin: 0 auto;
+    width: 20px;
+    height: 20px;
+    background-color: black;
+}
 
 #title{
     font-family: 'Luckiest Guy', cursive;
@@ -34,8 +42,8 @@ body{
 }
 
 #container{
-    width: 300px;
-    height: 300px;
+    width: 320px;
+    height: 320px;
     border-radius: 20px;
     background-color: rgb(206, 206, 206);
     padding: 25px;
@@ -46,6 +54,7 @@ body{
 #start{
     width: 100px;
     font-family: 'Luckiest Guy', cursive;
+    margin-bottom: 10px;
 }
 
 #controls{
@@ -58,7 +67,7 @@ body{
 
 #display{
     height: 100px;
-    width: 300px;
+    width: 320px;
     margin-top: 10px;
     margin-left: -10px;
     border-radius: 10px;

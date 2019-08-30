@@ -7,9 +7,12 @@ const count_view = document.querySelector('#count_view');
 const attack = document.querySelector('#attack');
 const computer_score = document.querySelector('#computer_score');
 const player_score = document.querySelector('#player_score');
+const success = document.querySelector('#success');
+const failure = document.querySelector('#failure');
+const tie = document.querySelector("#tie");
+const lights = document.querySelectorAll(".lights");
+let lightCount = 0;
 let started = false;
-
-
 
 
 start.addEventListener('click', ()=>{
@@ -32,6 +35,28 @@ function reset(){
     return true;
 }
 
+function redLight(){
+    lights[lightCount].style.backgroundColor = 'red';
+    lightCount++;
+}
+
+function greenLight(){
+    lights[lightCount].style.backgroundColor = 'rgb(0, 202, 0)';
+    lightCount++;
+}
+
+function tieLight(){
+    lights[lightCount].style.backgroundColor = 'gray';
+    lightCount++;
+}
+
+function lightsOut(){
+    lights.forEach((light)=>{
+        light.style.backgroundColor = 'black';
+    })
+    lightCount = 0;
+}
+
 function game(){
     let computerScore = 0;
     let playerScore = 0;
@@ -46,6 +71,7 @@ function game(){
         count_view.textContent = `Round: ${count}`;
         computer_score.textContent = computerScore;
         player_score.textContent = playerScore;
+        lightsOut();
     }
     
         rock.addEventListener('click', playRock);
@@ -100,29 +126,47 @@ function game(){
         function playRound(playerSelection, computerSelection){
             if(playerSelection.toLowerCase() === 'paper' && computerSelection === 'rock'){
                 computerScore+=1;
+                redLight()
+                failure.play();
                 return "You lose! Paper beats rock."
             } else if (playerSelection.toLowerCase() === 'rock' && computerSelection === "paper") {
                 playerScore+=1;
+                greenLight();
+                success.play();
                 return "You win! Computer chose poorly."
             } else if (playerSelection.toLowerCase() === 'scissors' && computerSelection === "rock"){
                 computerScore+=1;
+                redLight();
+                failure.play();
                 return "You lose! Rock beats scissors."
             } else if (playerSelection.toLowerCase() === 'rock' && computerSelection === 'scissors'){
                 playerScore+=1;
+                greenLight();
+                success.play();
                 return "You win! Computer chose poorly."
             } else if (playerSelection.toLowerCase() === 'paper' && computerSelection === 'rock'){
                 playerScore+=1;
+                greenLight();
+                success.play();
                 return "You win! Computer chose poorly."
             } else if (playerSelection.toLowerCase() === 'rock' && computerSelection === 'paper'){
                 computerScore+=1;
+                redLight();
+                failure.play();
                 return "You lose! Paper beats rock"
             } else if (playerSelection.toLowerCase() === 'scissors' && computerSelection === 'paper'){
                 playerScore+=1;
+                greenLight();
+                success.play();
                 return "You win! Computer chose poorly"
-            } else if (playerSelection.toLowerCase() === 'paper' && computerPlay === 'scissors'){
+            } else if (playerSelection.toLowerCase() === 'paper' && computerSelection === 'scissors'){
                 computerScore+=1;
+                redLight();
+                failure.play();
                 return "You lose! Scissors beats paper"
             } else if (playerSelection.toLowerCase() === computerSelection){
+                tieLight();
+                tie.play();
                 return "It's a tie!"
             } else {
                 return "Huh? Please Enter Rock, Paper or Scissors."
