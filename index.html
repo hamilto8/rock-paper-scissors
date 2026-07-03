@@ -4,16 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="color-scheme" content="dark">
     <meta name="description" content="Rock, Paper, Scissors | Ultimate Edition PRO. Experience the classic game reimagined with futuristic cyberpunk aesthetics, dynamic animations, and responsive interactive design.">
+    <meta name="author" content="Michael Hamilton">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Rock, Paper, Scissors | Ultimate Edition PRO">
+    <meta property="og:description" content="Experience the classic game reimagined with futuristic cyberpunk aesthetics, dynamic animations, and responsive interactive design.">
+    <meta property="og:image" content="./images/rock.gif">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Rock, Paper, Scissors | Ultimate Edition PRO">
+    <meta property="twitter:description" content="Experience the classic game reimagined with futuristic cyberpunk aesthetics, dynamic animations, and responsive interactive design.">
+    <meta property="twitter:image" content="./images/rock.gif">
+
+    <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./index.css">
+    <link rel="icon" href="./images/rock.ico" type="image/x-icon">
     <link rel="shortcut icon" href="./images/rock.ico" type="image/x-icon">
+    
+    <!-- Non-blocking deferred script loading -->
+    <script src="./index.js" defer></script>
     <title>Rock, Paper, Scissors | Ultimate Edition PRO</title>
 </head>
 <body>
-    <div class="app-background">
+    <div class="app-background" aria-hidden="true">
         <div class="glow-orb orb-1"></div>
         <div class="glow-orb orb-2"></div>
         <div class="grid-overlay"></div>
@@ -22,17 +42,17 @@
     <header class="navbar" id="navbar">
         <div class="nav-container">
             <div class="brand">
-                <span class="brand-icon">⚡</span>
+                <span class="brand-icon" aria-hidden="true">⚡</span>
                 <span class="brand-title">RPS <span class="highlight">ARENA</span></span>
                 <span class="pro-badge">PRO v2.0</span>
             </div>
             <div class="nav-controls">
                 <button id="sound-toggle" class="btn-icon" aria-label="Toggle Sound" title="Toggle Sound (M)">
-                    <span id="sound-icon">🔊</span>
+                    <span id="sound-icon" aria-hidden="true">🔊</span>
                     <span id="sound-label">Sound On</span>
                 </button>
                 <button id="reset-btn" class="btn-secondary" aria-label="Reset Match" title="Reset Match (Esc)">
-                    <span>🔄 Reset Arena</span>
+                    <span aria-hidden="true">🔄</span> <span>Reset Arena</span>
                 </button>
             </div>
         </div>
@@ -48,16 +68,16 @@
         <!-- Scoreboard Section -->
         <section class="scoreboard-section" aria-label="Game Scoreboard">
             <div class="score-card player-card" id="player-card">
-                <div class="avatar">🧑‍🚀</div>
+                <div class="avatar" aria-hidden="true">🧑‍🚀</div>
                 <div class="score-info">
                     <h2 class="player-name">PLAYER</h2>
                     <span class="score-label">SCORE</span>
                 </div>
-                <div class="score-value" id="player_score">0</div>
+                <div class="score-value" id="player_score" aria-live="polite">0</div>
             </div>
 
             <div class="round-center">
-                <div class="round-display" id="count_view">ROUND 1 OF 5</div>
+                <div class="round-display" id="count_view" aria-live="polite">ROUND 1 OF 5</div>
                 <div class="lights-container" role="progressbar" aria-label="Round progress and results">
                     <div class="light-indicator" data-round="1" title="Round 1"></div>
                     <div class="light-indicator" data-round="2" title="Round 2"></div>
@@ -69,12 +89,12 @@
             </div>
 
             <div class="score-card computer-card" id="computer-card">
-                <div class="avatar">🤖</div>
+                <div class="avatar" aria-hidden="true">🤖</div>
                 <div class="score-info">
                     <h2 class="player-name">CYBER AI</h2>
                     <span class="score-label">SCORE</span>
                 </div>
-                <div class="score-value" id="computer_score">0</div>
+                <div class="score-value" id="computer_score" aria-live="polite">0</div>
             </div>
         </section>
 
@@ -82,12 +102,12 @@
         <section class="battle-stage" aria-live="polite">
             <div class="battle-display" id="display">
                 <div class="choice-preview" id="player-preview">
-                    <div class="preview-circle">❓</div>
+                    <div class="preview-circle" aria-hidden="true">❓</div>
                     <span class="preview-label">Your Move</span>
                 </div>
-                <div class="vs-badge">VS</div>
+                <div class="vs-badge" aria-hidden="true">VS</div>
                 <div class="choice-preview" id="computer-preview">
-                    <div class="preview-circle">❓</div>
+                    <div class="preview-circle" aria-hidden="true">❓</div>
                     <span class="preview-label">AI Move</span>
                 </div>
             </div>
@@ -97,46 +117,46 @@
         </section>
 
         <!-- Weapon Controls Section -->
-        <section class="controls-section">
+        <section class="controls-section" aria-label="Weapon Controls">
             <div class="controls-grid" id="controls">
                 <button class="weapon-card" id="rock" data-choice="rock" aria-label="Play Rock (Key 1 or R)">
-                    <div class="key-hint">1 / R</div>
+                    <div class="key-hint" aria-hidden="true">1 / R</div>
                     <div class="weapon-image-wrapper">
-                        <img src="./images/rock.gif" alt="Animated Rock weapon" class="weapon-img">
+                        <img src="./images/rock.gif" alt="" class="weapon-img" aria-hidden="true">
                     </div>
                     <h4 class="weapon-title">ROCK</h4>
                     <p class="weapon-desc">Crushes Scissors</p>
-                    <div class="card-glow"></div>
+                    <div class="card-glow" aria-hidden="true"></div>
                 </button>
 
                 <button class="weapon-card" id="paper" data-choice="paper" aria-label="Play Paper (Key 2 or P)">
-                    <div class="key-hint">2 / P</div>
+                    <div class="key-hint" aria-hidden="true">2 / P</div>
                     <div class="weapon-image-wrapper">
-                        <img src="./images/paper.gif" alt="Animated Paper weapon" class="weapon-img">
+                        <img src="./images/paper.gif" alt="" class="weapon-img" aria-hidden="true">
                     </div>
                     <h4 class="weapon-title">PAPER</h4>
                     <p class="weapon-desc">Envelops Rock</p>
-                    <div class="card-glow"></div>
+                    <div class="card-glow" aria-hidden="true"></div>
                 </button>
 
                 <button class="weapon-card" id="scissors" data-choice="scissors" aria-label="Play Scissors (Key 3 or S)">
-                    <div class="key-hint">3 / S</div>
+                    <div class="key-hint" aria-hidden="true">3 / S</div>
                     <div class="weapon-image-wrapper">
-                        <img src="./images/scissors.gif" alt="Animated Scissors weapon" class="weapon-img">
+                        <img src="./images/scissors.gif" alt="" class="weapon-img" aria-hidden="true">
                     </div>
                     <h4 class="weapon-title">SCISSORS</h4>
                     <p class="weapon-desc">Slices Paper</p>
-                    <div class="card-glow"></div>
+                    <div class="card-glow" aria-hidden="true"></div>
                 </button>
             </div>
         </section>
     </main>
 
-    <!-- Game Over Modal -->
-    <div class="modal-overlay hidden" id="game-over-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <!-- Native HTML5 Game Over Modal Dialog -->
+    <dialog class="modal-overlay" id="game-over-modal" aria-labelledby="modal-title" aria-describedby="modal-subtitle">
         <div class="modal-content glass-card">
             <div class="modal-header">
-                <div class="modal-icon" id="modal-icon">🏆</div>
+                <div class="modal-icon" id="modal-icon" aria-hidden="true">🏆</div>
                 <h2 id="modal-title" class="modal-title">VICTORY!</h2>
                 <p id="modal-subtitle" class="modal-subtitle">You defeated the Cyber AI!</p>
             </div>
@@ -154,11 +174,11 @@
             </div>
             <div class="modal-footer">
                 <button id="rematch-btn" class="btn-primary btn-pulse">
-                    <span>⚡ PLAY REMATCH</span>
+                    <span aria-hidden="true">⚡</span> <span>PLAY REMATCH</span>
                 </button>
             </div>
         </div>
-    </div>
+    </dialog>
 
     <footer class="footer" id="footer">
         <p>&copy; 2019–2026 Michael Hamilton • Rock, Paper, Scissors Ultimate Edition PRO • Enhanced with Modern Standards</p>
@@ -168,7 +188,5 @@
     <audio id="success" src="./sound/success.mp3" preload="auto"></audio>
     <audio id="failure" src="./sound/failure.mp3" preload="auto"></audio>
     <audio id="tie" src="./sound/tie.mp3" preload="auto"></audio>
-
-    <script src="./index.js"></script>
 </body>
 </html>

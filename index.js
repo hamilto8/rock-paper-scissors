@@ -12,7 +12,7 @@ class RockPaperScissorsGame {
     constructor() {
         // Game Configuration
         this.maxRounds = 5;
-        this.winTarget = 3; // First to 3 wins
+        this.winTarget = 3; // First to 3 wins takes the championship
 
         // Game State
         this.playerScore = 0;
@@ -40,7 +40,7 @@ class RockPaperScissorsGame {
         this.playerPreviewEl = document.querySelector('#player-preview .preview-circle');
         this.computerPreviewEl = document.querySelector('#computer-preview .preview-circle');
 
-        // DOM Elements - Modal
+        // DOM Elements - Native Dialog Modal
         this.modalEl = document.getElementById('game-over-modal');
         this.modalIconEl = document.getElementById('modal-icon');
         this.modalTitleEl = document.getElementById('modal-title');
@@ -71,11 +71,17 @@ class RockPaperScissorsGame {
         });
 
         // Bind reset & rematch buttons
-        this.resetBtn.addEventListener('click', () => this.resetGame());
-        this.rematchBtn.addEventListener('click', () => this.resetGame());
+        if (this.resetBtn) {
+            this.resetBtn.addEventListener('click', () => this.resetGame());
+        }
+        if (this.rematchBtn) {
+            this.rematchBtn.addEventListener('click', () => this.resetGame());
+        }
 
         // Bind sound toggle
-        this.soundToggleBtn.addEventListener('click', () => this.toggleSound());
+        if (this.soundToggleBtn) {
+            this.soundToggleBtn.addEventListener('click', () => this.toggleSound());
+        }
 
         // Bind keyboard navigation
         document.addEventListener('keydown', (e) => this.handleKeyPress(e));
@@ -87,9 +93,10 @@ class RockPaperScissorsGame {
 
     /**
      * Handle keyboard shortcuts for pro gameplay
+     * @param {KeyboardEvent} e - The keyboard event object
      */
     handleKeyPress(e) {
-        // Ignore if typing in an input (not applicable here, but good practice)
+        // Ignore if typing in form fields
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
 
         const key = e.key.toLowerCase();
@@ -102,10 +109,17 @@ class RockPaperScissorsGame {
         } else if (key === 'm') {
             this.toggleSound();
         } else if (key === 'escape') {
-            this.resetGame();
+            // If modal is open, native dialog closes on Escape; let's also reset match if requested
+            if (!this.modalEl.open) {
+                this.resetGame();
+            }
         }
     }
 
+    /**
+     * Trigger click on weapon card by choice name
+     * @param {string} choice - 'rock', 'paper', or 'scissors'
+     */
     triggerWeaponClick(choice) {
         const card = document.querySelector(`.weapon-card[data-choice="${choice}"]`);
         if (card && !this.isGameOver) {
@@ -132,6 +146,7 @@ class RockPaperScissorsGame {
 
     /**
      * Safely play an audio element without promise rejection errors
+     * @param {HTMLAudioElement} audioEl - The audio element to play
      */
     playAudio(audioEl) {
         if (!this.isSoundEnabled || !audioEl) return;
@@ -146,11 +161,26 @@ class RockPaperScissorsGame {
     }
 
     /**
+     * Trigger subtle vibration on supported mobile/touch devices
+     * @param {number} duration - Milliseconds to vibrate
+     */
+    triggerHaptic(duration = 40) {
+        if (typeof navigator !== 'undefined' && navigator.vibrate && this.isSoundEnabled) {
+            try {
+                navigator.vibrate(duration);
+            } catch (e) {
+                // Ignore vibration errors on unsupported environments
+            }
+        }
+    }
+
+    /**
      * Generate AI move using crypto random for true randomness
+     * @returns {string} - 'rock', 'paper', or 'scissors'
      */
     getComputerMove() {
         const moves = ['rock', 'paper', 'scissors'];
-        if (window.crypto && window.crypto.getRandomValues) {
+        if (typeof window !== 'undefined' && window.crypto && window.crypto.getRandomValues) {
             const randomBuffer = new Uint32Array(1);
             window.crypto.getRandomValues(randomBuffer);
             return moves[randomBuffer[0] % moves.length];
@@ -183,7 +213,9 @@ class RockPaperScissorsGame {
 
     /**
      * Evaluate the winner of the round
-     * Returns: 'win' | 'loss' | 'tie'
+     * @param {string} player - Player choice
+     * @param {string} computer - Computer choice
+     * @returns {'win' | 'loss' | 'tie'}
      */
     evaluateWinner(player, computer) {
         if (player === computer) {
@@ -205,6 +237,7 @@ class RockPaperScissorsGame {
 
     /**
      * Update scores, indicators, and sound based on round outcome
+     * @param {'win' | 'loss' | 'tie'} result - The result of the round
      */
     updateRoundStats(result) {
         const currentLight = document.querySelector(`.light-indicator[data-round="${this.currentRound}"]`);
@@ -212,13 +245,16 @@ class RockPaperScissorsGame {
         if (result === 'win') {
             this.playerScore++;
             this.playAudio(this.audioSuccess);
+            this.triggerHaptic(50);
             if (currentLight) currentLight.classList.add('win-player');
         } else if (result === 'loss') {
             this.computerScore++;
             this.playAudio(this.audioFailure);
+            this.triggerHaptic([30, 30, 60]);
             if (currentLight) currentLight.classList.add('win-computer');
         } else if (result === 'tie') {
             this.playAudio(this.audioTie);
+            this.triggerHaptic(20);
             if (currentLight) currentLight.classList.add('win-tie');
         }
 
@@ -229,10 +265,12 @@ class RockPaperScissorsGame {
 
     /**
      * Trigger scale bounce on score increment
+     * @param {HTMLElement} el - The score element
+     * @param {number} newScore - The updated score value
      */
     animateScoreChange(el, newScore) {
-        if (parseInt(el.textContent, 10) !== newScore) {
-            el.textContent = newScore;
+        if (el && parseInt(el.textContent, 10) !== newScore) {
+            el.textContent = String(newScore);
             el.style.transform = 'scale(1.4)';
             el.style.color = 'var(--neon-yellow)';
             setTimeout(() => {
@@ -244,9 +282,12 @@ class RockPaperScissorsGame {
 
     /**
      * Render the center battle stage choices and message
+     * @param {string} playerChoice - Player weapon
+     * @param {string} computerChoice - Computer weapon
+     * @param {'win' | 'loss' | 'tie'} result - Round result
      */
     renderBattleStage(playerChoice, computerChoice, result) {
-        // Render weapon GIFs inside preview circles
+        // Render weapon GIFs inside preview circles with descriptive alt text
         this.playerPreviewEl.innerHTML = `<img src="./images/${playerChoice}.gif" alt="Player chose ${playerChoice}">`;
         this.computerPreviewEl.innerHTML = `<img src="./images/${computerChoice}.gif" alt="Computer chose ${computerChoice}">`;
 
@@ -286,9 +327,16 @@ class RockPaperScissorsGame {
         }
     }
 
-    showStatus(msg, className) {
-        this.statusMessageEl.textContent = msg;
-        this.statusMessageEl.className = `status-message ${className || ''}`;
+    /**
+     * Display status message with CSS class styling
+     * @param {string} msg - Message text
+     * @param {string} [className] - Optional color class
+     */
+    showStatus(msg, className = "") {
+        if (this.statusMessageEl) {
+            this.statusMessageEl.textContent = msg;
+            this.statusMessageEl.className = `status-message ${className}`;
+        }
     }
 
     /**
@@ -300,17 +348,20 @@ class RockPaperScissorsGame {
             setTimeout(() => this.showGameOverModal(), 800);
         } else {
             this.currentRound++;
-            this.roundDisplayEl.textContent = `ROUND ${this.currentRound} OF ${this.maxRounds}`;
+            if (this.roundDisplayEl) {
+                this.roundDisplayEl.textContent = `ROUND ${this.currentRound} OF ${this.maxRounds}`;
+            }
         }
     }
 
     /**
-     * Show Championship conclusion modal
+     * Show Championship conclusion modal using native HTML5 <dialog>
      */
     showGameOverModal() {
-        this.modalEl.classList.remove('hidden');
+        if (!this.modalEl) return;
+
         this.modalScoreEl.textContent = `${this.playerScore} - ${this.computerScore}`;
-        this.modalRoundsEl.textContent = this.currentRound;
+        this.modalRoundsEl.textContent = String(this.currentRound);
 
         if (this.playerScore > this.computerScore) {
             this.modalIconEl.textContent = '🏆';
@@ -332,8 +383,20 @@ class RockPaperScissorsGame {
             this.playAudio(this.audioTie);
         }
 
+        // Show native modal dialog
+        if (typeof this.modalEl.showModal === 'function') {
+            if (!this.modalEl.open) {
+                this.modalEl.showModal();
+            }
+        } else {
+            // Fallback for older environments without native dialog
+            this.modalEl.setAttribute('open', 'true');
+        }
+
         // Focus rematch button for keyboard accessibility
-        this.rematchBtn.focus();
+        if (this.rematchBtn) {
+            this.rematchBtn.focus();
+        }
     }
 
     /**
@@ -345,24 +408,36 @@ class RockPaperScissorsGame {
         this.currentRound = 1;
         this.isGameOver = false;
 
-        // Hide Modal
-        this.modalEl.classList.add('hidden');
+        // Close native modal dialog
+        if (this.modalEl && typeof this.modalEl.close === 'function') {
+            if (this.modalEl.open) {
+                this.modalEl.close();
+            }
+        } else if (this.modalEl) {
+            this.modalEl.removeAttribute('open');
+        }
 
         // Reset UI Elements
-        this.playerScoreEl.textContent = '0';
-        this.computerScoreEl.textContent = '0';
-        this.roundDisplayEl.textContent = `ROUND 1 OF ${this.maxRounds}`;
-        this.matchBadgeEl.textContent = "BATTLE READY";
-        this.matchBadgeEl.style.color = "";
-        this.matchBadgeEl.style.borderColor = "";
+        if (this.playerScoreEl) this.playerScoreEl.textContent = '0';
+        if (this.computerScoreEl) this.computerScoreEl.textContent = '0';
+        if (this.roundDisplayEl) this.roundDisplayEl.textContent = `ROUND 1 OF ${this.maxRounds}`;
+        if (this.matchBadgeEl) {
+            this.matchBadgeEl.textContent = "BATTLE READY";
+            this.matchBadgeEl.style.color = "";
+            this.matchBadgeEl.style.borderColor = "";
+        }
 
         this.showStatus("Press any weapon to begin the clash!", "");
 
         // Reset Previews
-        this.playerPreviewEl.innerHTML = '❓';
-        this.computerPreviewEl.innerHTML = '❓';
-        this.playerPreviewEl.classList.remove('clash-player');
-        this.computerPreviewEl.classList.remove('clash-computer');
+        if (this.playerPreviewEl) {
+            this.playerPreviewEl.innerHTML = '❓';
+            this.playerPreviewEl.classList.remove('clash-player');
+        }
+        if (this.computerPreviewEl) {
+            this.computerPreviewEl.innerHTML = '❓';
+            this.computerPreviewEl.classList.remove('clash-computer');
+        }
 
         // Reset Lights
         this.lightIndicators.forEach(light => {
@@ -376,14 +451,22 @@ class RockPaperScissorsGame {
      * Initial UI rendering
      */
     renderUI() {
-        this.roundDisplayEl.textContent = `ROUND 1 OF ${this.maxRounds}`;
-        this.playerScoreEl.textContent = '0';
-        this.computerScoreEl.textContent = '0';
+        if (this.roundDisplayEl) this.roundDisplayEl.textContent = `ROUND 1 OF ${this.maxRounds}`;
+        if (this.playerScoreEl) this.playerScoreEl.textContent = '0';
+        if (this.computerScoreEl) this.computerScoreEl.textContent = '0';
         this.showStatus("Press any weapon to begin the clash!", "");
     }
 }
 
-// Initialize application when DOM is fully loaded
-document.addEventListener('DOMContentLoaded', () => {
-    window.rpsGame = new RockPaperScissorsGame();
-});
+// Robust initialization ensuring compatibility with async/defer or DOMContentLoaded
+if (typeof document !== 'undefined') {
+    const initGame = () => {
+        window.rpsGame = new RockPaperScissorsGame();
+    };
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initGame);
+    } else {
+        initGame();
+    }
+}

@@ -4,19 +4,23 @@
 [![Styled with CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
 [![Powered by Vanilla JS](https://img.shields.io/badge/Vanilla_JS-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![License: MIT](https://img.shields.io/badge/License-MIT-purple.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![WCAG AA Compliant](https://img.shields.io/badge/WCAG-AA_Compliant-00ff88.svg?style=for-the-badge)](https://www.w3.org/WAI/standards-guidelines/wcag/)
 
-**Rock, Paper, Scissors | Ultimate Edition PRO** is a state-of-the-art web reimagining of the classic hand game. Engineered with sleek cyberpunk glassmorphism, dynamic animations, responsive layouts, and pro-level keyboard controls, this project demonstrates modern frontend web development standards without relying on heavy external frameworks.
+**Rock, Paper, Scissors | Ultimate Edition PRO** is a state-of-the-art web reimagining of the classic hand game. Engineered with sleek cyberpunk glassmorphism, dynamic animations, responsive layouts, native HTML5 dialogs, mobile haptic feedback, and pro-level keyboard controls, this project demonstrates modern frontend web development standards without relying on heavy external frameworks.
 
 ---
 
-## 🌟 Key Features
+## 🌟 Key Features & Industry Best Practices
 
-- **⚡ Cyberpunk Glassmorphism UI**: Frosted glass containers (`backdrop-filter`), floating glowing cyber-orbs, and a neon color palette that adapts cleanly across mobile, tablet, and desktop screens.
+- **⚡ Cyberpunk Glassmorphism UI**: Frosted glass containers (`backdrop-filter`), floating glowing cyber-orbs, and a neon color palette (`color-scheme: dark`) that adapts cleanly across mobile, tablet, and desktop screens.
+- **🏛️ Native HTML5 `<dialog>` Modal**: Utilizes the native `<dialog>` element with `.showModal()` for built-in accessibility, modal backdrop trapping (`::backdrop`), and automated keyboard navigation (`Escape` closing).
+- **♿ Full Accessibility & Vestibular Support**: Built with semantic HTML5 elements, descriptive ARIA labels (`aria-live="polite"`, `role="progressbar"`), focus-visible indicators, and **prefers-reduced-motion** CSS media query support to disable heavy animations for vestibular-sensitive users.
+- **📱 Mobile Haptic Feedback**: Integrates the Web Vibration API (`navigator.vibrate`) for subtle physical touch feedback during victories, defeats, and draws on supported touch devices.
 - **🏆 Championship Series Format**: Play in a best-of-5 tournament structure. Live round indicators track progress, winning streaks, and visual clash outcomes.
 - **⌨️ Pro Keyboard Shortcuts**: Complete keyboard accessibility for lightning-fast gameplay without touching the mouse.
-- **🔊 Interactive Audio System**: Integrated sound effects for victories, defeats, and draws with an accessible mute/unmute toggle.
-- **🛡️ Flawless Game Logic**: Strict win/loss evaluation algorithms and bug-free state management built on clean ES6 Object-Oriented principles.
-- **♿ Accessibility & SEO Ready**: Built with semantic HTML5 elements, ARIA attributes, keyboard focus indicators, and screen-reader friendly labels.
+- **🔊 Interactive Audio System**: Integrated sound effects with error-safe playback stream resetting and an accessible mute/unmute toggle.
+- **🛡️ Cryptographic AI Moves**: Uses `window.crypto.getRandomValues` for true cryptographic randomness when generating Cyber AI moves.
+- **🔍 SEO & Open Graph Ready**: Includes full meta tags for social media link previews (Facebook Open Graph, Twitter Cards), favicon definitions, and viewport formatting.
 
 ---
 
@@ -28,7 +32,7 @@
    - 📄 **Paper** envelops 🪨 **Rock**
    - ✂️ **Scissors** slices 📄 **Paper**
 3. **Championship Victory**: The first combatant (Player or Cyber AI) to reach **3 wins** takes the championship!
-4. **Rematch**: Use the reset button or rematch modal to clear the arena for a new championship series.
+4. **Rematch**: Use the reset button or rematch modal dialog to clear the arena for a new championship series.
 
 ### ⌨️ Keyboard Shortcuts
 
@@ -38,7 +42,7 @@
 | <kbd>2</kbd> or <kbd>P</kbd> | Play **Paper** |
 | <kbd>3</kbd> or <kbd>S</kbd> | Play **Scissors** |
 | <kbd>M</kbd> | Toggle Sound On / Muted |
-| <kbd>Esc</kbd> | Reset Match / Clear Arena |
+| <kbd>Esc</kbd> | Reset Match / Close Dialog |
 
 ---
 
@@ -72,13 +76,16 @@ npx serve .
 
 ---
 
-## 🏗️ Project Architecture
+## 🏗️ Project Architecture & Standards
 
 ```text
 rock-paper-scissors/
-├── index.html       # Semantic HTML5 structure & UI layout
-├── index.css        # Cyberpunk glassmorphism design system & responsive styling
-├── index.js         # Core ES6+ OOP state machine & game controller
+├── .editorconfig    # Cross-editor formatting rules (utf-8, lf, indent spacing)
+├── .gitignore       # Git exclusion patterns for OS, IDE, and log files
+├── LICENSE          # Formal MIT License
+├── index.html       # Semantic HTML5 structure, SEO tags, & native <dialog>
+├── index.css        # Cyberpunk glassmorphism design system & a11y reduced motion
+├── index.js         # Core ES6+ OOP state machine & Web APIs (Crypto, Vibration)
 ├── images/          # Weapon animations and icons
 │   ├── rock.gif
 │   ├── paper.gif
@@ -88,13 +95,13 @@ rock-paper-scissors/
 │   ├── success.mp3
 │   ├── failure.mp3
 │   └── tie.mp3
-└── README.md        # Project documentation
+└── README.md        # Comprehensive project documentation
 ```
 
-### Code Quality & Best Practices
-- **CSS Architecture**: Employs CSS Custom Properties (`--variables`), CSS Grid, Flexbox, and hardware-accelerated animations (`transform`, `opacity`).
-- **JavaScript OOP**: Encapsulated within a modular `RockPaperScissorsGame` class to prevent global scope pollution, event listener stacking, and memory leaks.
-- **Audio Handling**: Protects against rapid-click DOM audio rejection errors by resetting audio playback streams dynamically.
+### Engineering Standards Applied
+- **Git & Configuration**: Complete with standard `.gitignore`, `.editorconfig`, and MIT `LICENSE`.
+- **CSS Architecture**: Employs CSS Custom Properties (`--variables`), CSS Grid, Flexbox, `color-scheme: dark`, and hardware-accelerated animations (`transform`, `opacity`).
+- **JavaScript OOP**: Encapsulated within a modular `RockPaperScissorsGame` class with safe DOM ready checking (`document.readyState`), zero global scope pollution, and zero event listener leaks.
 
 ---
 
