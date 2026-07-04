@@ -8,6 +8,8 @@
 
 **Rock, Paper, Scissors | Ultimate Edition PRO** is a state-of-the-art web reimagining of the classic hand game. Engineered with sleek cyberpunk glassmorphism, dynamic animations, responsive layouts, native HTML5 dialogs, mobile haptic feedback, and pro-level keyboard controls, this project demonstrates modern frontend web development standards without relying on heavy external frameworks.
 
+![RPS Arena PRO UI Screenshot](./images/screenshot.png)
+
 ---
 
 ## 🌟 Key Features & Industry Best Practices
