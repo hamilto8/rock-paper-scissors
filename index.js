@@ -152,9 +152,12 @@ class RockPaperScissorsGame {
         if (!this.isSoundEnabled || !audioEl) return;
         try {
             audioEl.currentTime = 0;
-            audioEl.play().catch(err => {
-                console.warn("Audio playback prevented by browser auto-play policy:", err);
-            });
+            const playPromise = audioEl.play();
+            if (playPromise !== undefined && typeof playPromise.catch === 'function') {
+                playPromise.catch(err => {
+                    console.warn("Audio playback prevented by browser auto-play policy:", err);
+                });
+            }
         } catch (err) {
             console.warn("Audio play error:", err);
         }
@@ -281,6 +284,25 @@ class RockPaperScissorsGame {
     }
 
     /**
+     * Safely update preview element content without using innerHTML
+     * @param {HTMLElement} containerEl - Container element
+     * @param {string} choice - Weapon choice name or question mark
+     */
+    setPreviewContent(containerEl, choice) {
+        if (!containerEl) return;
+        containerEl.textContent = ''; // Clear safely without innerHTML
+        if (!choice || choice === '❓') {
+            containerEl.textContent = '❓';
+            return;
+        }
+        const img = document.createElement('img');
+        img.src = `./images/${choice}.gif`;
+        img.alt = `${choice} weapon animation`;
+        img.className = 'preview-img';
+        containerEl.appendChild(img);
+    }
+
+    /**
      * Render the center battle stage choices and message
      * @param {string} playerChoice - Player weapon
      * @param {string} computerChoice - Computer weapon
@@ -288,8 +310,8 @@ class RockPaperScissorsGame {
      */
     renderBattleStage(playerChoice, computerChoice, result) {
         // Render weapon GIFs inside preview circles with descriptive alt text
-        this.playerPreviewEl.innerHTML = `<img src="./images/${playerChoice}.gif" alt="Player chose ${playerChoice}">`;
-        this.computerPreviewEl.innerHTML = `<img src="./images/${computerChoice}.gif" alt="Computer chose ${computerChoice}">`;
+        this.setPreviewContent(this.playerPreviewEl, playerChoice);
+        this.setPreviewContent(this.computerPreviewEl, computerChoice);
 
         // Trigger CSS animation classes
         this.playerPreviewEl.classList.remove('clash-player');
@@ -431,11 +453,11 @@ class RockPaperScissorsGame {
 
         // Reset Previews
         if (this.playerPreviewEl) {
-            this.playerPreviewEl.innerHTML = '❓';
+            this.setPreviewContent(this.playerPreviewEl, '❓');
             this.playerPreviewEl.classList.remove('clash-player');
         }
         if (this.computerPreviewEl) {
-            this.computerPreviewEl.innerHTML = '❓';
+            this.setPreviewContent(this.computerPreviewEl, '❓');
             this.computerPreviewEl.classList.remove('clash-computer');
         }
 

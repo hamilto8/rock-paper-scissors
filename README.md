@@ -22,6 +22,7 @@
 - **⌨️ Pro Keyboard Shortcuts**: Complete keyboard accessibility for lightning-fast gameplay without touching the mouse.
 - **🔊 Interactive Audio System**: Integrated sound effects with error-safe playback stream resetting and an accessible mute/unmute toggle.
 - **🛡️ Cryptographic AI Moves**: Uses `window.crypto.getRandomValues` for true cryptographic randomness when generating Cyber AI moves.
+- **🔒 Zero XSS & Strict CSP**: Enforces a strict `Content-Security-Policy`, `X-Content-Type-Options: nosniff`, and a restrictive `Permissions-Policy`. Zero use of `.innerHTML` or inline script evaluations ensures immunity from browser safety warnings in Chrome, Edge, and Safari.
 - **🔍 SEO & Open Graph Ready**: Includes full meta tags for social media link previews (Facebook Open Graph, Twitter Cards), favicon definitions, and viewport formatting.
 
 ---
